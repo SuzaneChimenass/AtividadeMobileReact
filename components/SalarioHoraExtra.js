@@ -1,48 +1,45 @@
-import{useState} from "react"
+import { useState } from "react";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
-import{View, Text, StyleSheet, TextInput, Button} from 'react-native'
+const Media = () => {
+  const [salarioBase, setSalarioBase] = useState("0");
+  const [quantidadeHora, setQuantidadeHora] = useState("0");
+  const [salarioFinal, setSalarioFinal] = useState("");
 
-const Media = (props) => {
+  const calculo = () => {
+    const salarioNum = parseFloat(salarioBase);
+    const horasTrabalhadas = parseFloat(quantidadeHora);
 
-  const[salarioBase, setSalarioBase] = useState("0")
-  const[quantidadeHora, setQuantidadeHora] = useState("0")
-  const[salarioHoraExtra, setsalarioHoraExtra] = useState ("")
+    const jornadaNormal = 160;
+    
+    const valorHoraNormal = salarioNum / jornadaNormal;
 
- const calculo = () => {
-  let salarioPorHora = salarioBase / quantidadeHora;
-
-    if (quantidadeHora > 160) {
-      salarioPorHora * 0.50;
-    } else if (idadeNum >= 8 && idadeNum <= 10) {
-      categoria = 'Infantil B';
-    } else if (idadeNum >= 11 && idadeNum <= 13) {
-      categoria = 'Juvenil A';
-    } else if (idadeNum >= 14 && idadeNum <= 17) {
-      categoria = 'Juvenil B';
-    } else if (idadeNum >= 18) {
-      categoria = 'Adulto';
-    } else {
-      categoria = 'Fora das categorias';
+    if (horasTrabalhadas <= jornadaNormal) {
+      return salarioNum.toFixed(2);
     }
 
-    setCategoria(categoria);
+    const horasExtras = horasTrabalhadas - jornadaNormal;
+    const valorHoraExtra = valorHoraNormal * 1.5;
+    const totalExtra = horasExtras * valorHoraExtra;
+    
+    const salarioComExtra = salarioNum + totalExtra;
+    return salarioComExtra.toFixed(2);
   };
 
-  return(
-  <View>
-    <Text style={estilos.calculo}>Cálculo de Salário com Hora Extra</Text>
-    <Text>Digite seu salário base:</Text>
-
+  return (
+    <View style={estilos.container}>
+      <Text style={estilos.calculo}>Salário com Hora Extra:</Text>
+      <Text>Digite seu salário base:</Text>
       <TextInput
         value={salarioBase}
         onChangeText={setSalarioBase}
         style={estilos.input}
-        placeholder="Salario Base"
+        placeholder="Salário Base"
         keyboardType="numeric"
       />
 
       <Text>Quantidade de horas trabalhadas no mês:</Text>
-       <TextInput
+      <TextInput
         value={quantidadeHora}
         onChangeText={setQuantidadeHora}
         style={estilos.input}
@@ -50,27 +47,53 @@ const Media = (props) => {
         keyboardType="numeric"
       />
 
-      <Button style={estilos.botao}
-        title ="Calcular Hora Extra"
-        onPress={() => setsalarioHoraExtra((+salarioBase + +quantidadeHora) / 5)}
-        color="black"
-      />
-      <Text>O salário com hora extra é de: {salarioHoraExtra} </Text>
-  </View>
-  )
-}
-export default Media
+    <TouchableOpacity 
+      style={estilos.botao}
+      onPress={() => setSalarioFinal(calculo())}>
+      <Text style={estilos.botaoTexto}>Calcular Hora Extra</Text>
+    </TouchableOpacity>
 
-const estilos = StyleSheet.create(
-  {
-    calculo: {
-      color: 'black',
-      fontSize: 30
-    },
-    input: {
-      backgroundColor: 'white',
-      marginTop: 5,
-      marginBotton: 5
-    }
+      <Text style={estilos.resultado}>O salário final é: R$ {salarioFinal}</Text>
+    </View>
+  );
+}
+
+export default Media;
+
+const estilos = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  calculo: {
+    color: 'black',
+    fontSize: 30,
+    marginBottom: 20
+  },
+  input: {
+    backgroundColor: 'white',
+    marginTop: 5,
+    marginBottom: 5,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 20
+  },
+  botao: {
+    marginTop: 10,
+    borderRadius: 20,
+    backgroundColor: '#b3675d',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center'
+  },
+  botaoTexto: {
+    color: 'white',
+    fontSize: 16,
+  },
+  resultado: {
+    fontSize: 18,
+    paddingTop:20,
+    textAlign: 'center',
+    fontWeight: 'bold'
   }
-)
+});
