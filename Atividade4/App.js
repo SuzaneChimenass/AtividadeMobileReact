@@ -1,12 +1,11 @@
 import {SafeAreaView, StyleSheet } from 'react-native';
 
-// or any files within the Snack
-import SalarioHoraExtra from './components/SalarioHoraExtra';
+import TabuleiroXadrez from './components/TabuleiroXadrez';
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <SalarioHoraExtra />
+      <TabuleiroXadrez />
     </SafeAreaView>
   );
 }
